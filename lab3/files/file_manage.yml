@@ -1,0 +1,36 @@
+---
+- name: Create, modify and delete file
+  hosts: my_servers
+  connection: local
+  become: true
+  gather_facts: false
+
+  vars:
+    test_file_path: /tmp/ansible_test_file.txt
+
+  tasks:
+    - name: Create file with initial content
+      ansible.builtin.copy:
+        dest: "{{ test_file_path }}"
+        content: "Это исходное содержимое файла\n"
+        mode: '0644'
+
+    - name: Check that file exists
+      ansible.builtin.stat:
+        path: "{{ test_file_path }}"
+      register: file_stat
+
+    - name: Show file existence
+      ansible.builtin.debug:
+        msg: "Файл создан: {{ file_stat.stat.exists }}"
+
+    - name: Change file content before deletion
+      ansible.builtin.copy:
+        dest: "{{ test_file_path }}"
+        content: "Это уже другое содержимое перед удалением\n"
+        mode: '0644'
+
+    - name: Delete file
+      ansible.builtin.file:
+        path: "{{ test_file_path }}"
+        state: absent

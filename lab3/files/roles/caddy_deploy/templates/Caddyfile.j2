@@ -1,0 +1,11 @@
+{{ domain_name }} {
+    root * /usr/share/caddy
+    file_server
+
+    header {
+	X-App "Ansible Caddy Lab"
+        X-Environment "Local WSL"
+        X-Frame-Options "DENY"
+        X-Content-Type-Options "nosniff"
+    }
+}
